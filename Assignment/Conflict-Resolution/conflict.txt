@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 This line is from branch 1
+=======
+This line is from branch 2
+>>>>>>> conflict-branch-2
