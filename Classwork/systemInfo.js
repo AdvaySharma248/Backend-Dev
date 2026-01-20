@@ -1,0 +1,16 @@
+const os = require('os');
+
+function getSystemInfo() {
+    return {
+        cpuCount: os.cpus().length,
+        freeMemory: os.freemem(),
+        totalMemory: os.totalmem(),
+        platform: os.platform(),
+        uptime: os.uptime(),
+        hostname: os.hostname()
+    };
+}
+
+module.exports = {
+    getSystemInfo
+};

@@ -1,0 +1,12 @@
+2026-01-20T08:41:33.821Z | / | This is Home Page
+2026-01-20T08:41:43.670Z | /about | This is About Page
+2026-01-20T08:41:48.859Z | /contact | This is Contact Page
+2026-01-20T08:41:57.267Z | /nonexistent | 404 Page Not Found
+2026-01-20T08:46:01.249Z | GET /students | Request received
+2026-01-20T08:46:08.616Z | GET /students/1 | Request received
+2026-01-20T08:47:02.464Z | POST /students | Request received
+2026-01-20T08:47:02.464Z | POST /students | Student added with ID: 4
+2026-01-20T08:47:20.849Z | DELETE /students/2 | Request received
+2026-01-20T08:47:20.849Z | DELETE /students/2 | Student deleted with ID: 2
+2026-01-20T08:47:33.971Z | GET /invalid-route | Request received
+2026-01-20T08:47:33.971Z | GET /invalid-route | 404 - Route not found
