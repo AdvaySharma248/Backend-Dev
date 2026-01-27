@@ -1,0 +1,11 @@
+Log Analysis Report
+=================
+
+Total Lines: 10
+ERROR Count: 3
+WARNING Count: 3
+INFO Count: 4
+
+Error Rate: 30.00%
+Warning Rate: 30.00%
+Info Rate: 40.00%

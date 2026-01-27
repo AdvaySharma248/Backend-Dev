@@ -1,0 +1,24 @@
+[2026-01-27T05:26:27.838Z] === Directory Backup & Cleanup Utility Started ===
+[2026-01-27T05:26:27.850Z] Starting backup process from test_uploads to backup
+[2026-01-27T05:26:27.860Z] Backup directory ready: backup
+[2026-01-27T05:26:27.865Z] Backed up: another_file.txt -> 2026-01-27T05-26-27-862Z_another_file.txt
+[2026-01-27T05:26:27.867Z] Backed up: old_file.txt -> 2026-01-27T05-26-27-866Z_old_file.txt
+[2026-01-27T05:26:27.870Z] Backed up: recent_file.txt -> 2026-01-27T05-26-27-869Z_recent_file.txt
+[2026-01-27T05:26:27.871Z] Backup completed. 3 files backed up.
+[2026-01-27T05:26:27.874Z] Deleted old file: old_file.txt
+[2026-01-27T05:26:27.875Z] Cleanup completed. 1 old files deleted.
+[2026-01-27T05:26:27.876Z] === Directory Backup & Cleanup Utility Completed ===
+
+[2026-01-27T05:27:22.415Z] === Directory Backup & Cleanup Utility Started ===
+[2026-01-27T05:27:22.426Z] Starting backup process from test_uploads to custom_backup
+[2026-01-27T05:27:22.427Z] Backup directory ready: custom_backup
+[2026-01-27T05:27:22.431Z] Backed up: another_file.txt -> 2026-01-27T05-27-22-429Z_another_file.txt
+[2026-01-27T05:27:22.434Z] Backed up: recent_file.txt -> 2026-01-27T05-27-22-432Z_recent_file.txt
+[2026-01-27T05:27:22.435Z] Backup completed. 2 files backed up.
+[2026-01-27T05:27:22.437Z] Cleanup completed. 0 old files deleted.
+[2026-01-27T05:27:22.437Z] === Directory Backup & Cleanup Utility Completed ===
+
+[2026-01-27T05:27:26.573Z] === Directory Backup & Cleanup Utility Started ===
+[2026-01-27T05:27:26.585Z] Starting backup process from nonexistent_dir to backup
+[2026-01-27T05:27:26.586Z] Backup directory ready: backup
+[2026-01-27T05:27:26.588Z] FATAL ERROR: Error scanning directory nonexistent_dir: ENOENT: no such file or directory, scandir 'E:\BackEnd-Dev(BridgeLabz)\ClassTask\nonexistent_dir'

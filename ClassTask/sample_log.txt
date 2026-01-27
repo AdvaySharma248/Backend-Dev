@@ -1,0 +1,10 @@
+INFO: Application started
+ERROR: Database connection failed
+WARNING: Low memory
+INFO: User logged in
+ERROR: Invalid credentials
+INFO: Data processed successfully
+WARNING: High CPU usage
+ERROR: Timeout occurred
+INFO: Backup completed
+WARNING: Disk space low
