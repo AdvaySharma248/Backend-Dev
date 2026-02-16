@@ -1,0 +1,50 @@
+<!-- users list ka heading -->
+<h1>Users List</h1>
+
+<!-- filter section - user search karte hai // filter form -->
+<div>
+    <form method="GET" action="/users">
+        <label for="name">Filter by name:</label>
+        <!-- search box - previous search term dikhata hai // search input -->
+        <input type="text" id="name" name="name" value="<%= searchTerm %>" placeholder="Enter name to filter...">
+        <button type="submit">Filter</button>
+        <!-- agar search kiya hai to clear button dikhao // clear filter button -->
+        <% if (searchTerm) { %>
+            <a href="/users">Clear Filter</a>
+        <% } %>
+    </form>
+</div>
+
+<!-- users list dikhane ke liye // users list container -->
+<div>
+    <!-- agar users array empty hai to message dikhao // no users condition -->
+    <% if (users.length === 0) { %>
+        <!-- agar koi user nahi mila // no user found message -->
+        <p>No users found matching your search.</p>
+    <% } else { %>
+        <!-- kitne users mile // users count -->
+        <h2>Found <%= users.length %> user(s)</h2>
+        <!-- har user ke liye card banana hai // foreach user -->
+        <% users.forEach(user => { %>
+            <!-- user card // user info container -->
+            <div>
+                <!-- user name // user name display -->
+                <h3><%= user.name %></h3>
+                <!-- user id // user id display -->
+                <p><strong>ID:</strong> <%= user.id %></p>
+                <!-- user email // user email display -->
+                <p><strong>Email:</strong> <%= user.email %></p>
+            </div>
+        <% }); %>
+    <% } %>
+</div>
+
+<!-- example URLs dikhane ke liye // example links -->
+<div>
+    <h3>Try these examples:</h3>
+    <ul>
+        <li><a href="/users?name=john">/users?name=john</a> - Filter for "John"</li>
+        <li><a href="/users?name=smith">/users?name=smith</a> - Filter for "Smith"</li>
+        <li><a href="/users?name=al">/users?name=al</a> - Filter for names containing "al"</li>
+    </ul>
+</div>

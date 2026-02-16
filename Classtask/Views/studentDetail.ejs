@@ -1,0 +1,33 @@
+<!-- header include kiya // header template -->
+<%- include('partials/header') %>
+
+<!-- student details ka heading -->
+<h1>Student Details</h1>
+
+<!-- student info card -->
+<div class="card">
+    <!-- student id show kara // student id -->
+    <p><strong>ID:</strong> <%= student.id %></p>
+    <!-- student name show kara // student name -->
+    <p><strong>Name:</strong> <%= student.name %></p>
+    <!-- student marks show kara // student marks -->
+    <p><strong>Marks:</strong> <%= student.marks %>/100</p>
+    <!-- student grade show kara // student grade -->
+    <p><strong>Grade:</strong> <%= student.grade %></p>
+    <!-- student status show kara // pass ya fail status -->
+    <p><strong>Status:</strong> 
+        <!-- agar marks 35 ya zyada hai to pass // pass condition -->
+        <% if (student.marks >= 35) { %>
+            <span class="pass">PASS</span>
+        <% } else { %>
+            <!-- nahi to fail // fail condition -->
+            <span class="fail">FAIL</span>
+        <% } %>
+    </p>
+</div>
+
+<!-- back to list link // list pe jaane ka link -->
+<a href="/portal/students">Back to List</a>
+
+<!-- footer include kiya // footer template -->
+<%- include('partials/footer') %>

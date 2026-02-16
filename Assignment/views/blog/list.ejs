@@ -1,0 +1,38 @@
+<!-- blog posts ka heading -->
+<h1>Blog Posts</h1>
+
+<!-- new post create button -->
+<div>
+    <a href="/blog/new">Create New Post</a>
+</div>
+
+<!-- posts container -->
+<div>
+    <!-- agar koi post nahi hai to message show karo // no posts condition -->
+    <% if (posts.length === 0) { %>
+        <p>No blog posts yet. <a href="/blog/new">Create the first one!</a></p>
+    <% } else { %>
+        <!-- posts count show karo // posts counter -->
+        <h2>All Posts (<%= posts.length %>)</h2>
+        <!-- har ek post ke liye loop chalao // foreach post -->
+        <% posts.forEach(post => { %>
+            <!-- post card -->
+            <div>
+                <!-- post title with link // post title -->
+                <h3><a href="/blog/<%= post.id %>"><%= post.title %></a></h3>
+                <!-- post author aur date // author and date -->
+                <p>
+                    By <%= post.author %> on <%= post.date %>
+                </p>
+                <!-- post content ka snippet // content preview -->
+                <p>
+                    <%= post.content.substring(0, 150) %>...
+                </p>
+                <!-- read more link // read more button -->
+                <div>
+                    <a href="/blog/<%= post.id %>">Read More</a>
+                </div>
+            </div>
+        <% }); %>
+    <% } %>
+</div>

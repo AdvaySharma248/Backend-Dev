@@ -1,0 +1,38 @@
+<!-- photo gallery ka heading -->
+<h1>Photo Gallery</h1>
+
+<!-- images container -->
+<div>
+    <!-- agar images array empty hai to message dikhao // no images condition -->
+    <% if (images.length === 0) { %>
+        <p>No images available in the gallery.</p>
+    <% } else { %>
+        <!-- har image ke liye loop chalao // foreach image -->
+        <% images.forEach(image => { %>
+            <!-- image card // image container -->
+            <div>
+                <!-- image with error handling // image tag -->
+                <img src="https://picsum.photos/300/200?random=<%= image.name %>" alt="<%= image.alt %>" 
+                     onerror="this.src='https://via.placeholder.com/300x200?text=Image+Not+Found'">
+                <!-- image description // image alt text -->
+                <p><%= image.alt %></p>
+            </div>
+        <% }); %>
+    <% } %>
+</div>
+
+<!-- how it works section -->
+<div>
+    <h3>How it works:</h3>
+    <ul>
+        <li>Images are loaded from external sources</li>
+        <li>EJS template dynamically renders the image list</li>
+        <li>Placeholder images are shown if actual images don't load</li>
+    </ul>
+</div>
+
+<!-- note section -->
+<div>
+    <h3>Note:</h3>
+    <p>This gallery uses placeholder images from external sources.</p>
+</div>

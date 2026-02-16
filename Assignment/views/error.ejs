@@ -1,0 +1,19 @@
+<h1>500 - Internal Server Error</h1>
+
+<div>
+    <div>❌</div>
+    <h2>Something went wrong on our end.</h2>
+    <p>We're sorry, but something unexpected happened.</p>
+    
+    <% if (error) { %>
+        <div>
+            <h3>Error Details:</h3>
+            <p><%= error %></p>
+        </div>
+    <% } %>
+    
+    <div>
+        <a href="/">Go Home</a>
+        <button onclick="window.location.reload()">Try Again</button>
+    </div>
+</div>

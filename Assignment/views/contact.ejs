@@ -1,0 +1,46 @@
+<!-- contact us ka heading -->
+<h1>Contact Us</h1>
+
+<!-- agar success message hai to dikhao // success message show -->
+<% if (message) { %>
+    <div>
+        <p><%= message %></p>
+    </div>
+<% } %>
+
+<!-- contact form - POST method se data bhejte hai // contact form -->
+<form method="POST" action="/contact">
+    <!-- name field container -->
+    <div>
+        <label for="name">Name:</label>
+        <!-- name field - required hai // name input -->
+        <input type="text" id="name" name="name" required>
+    </div>
+    
+    <!-- email field container -->
+    <div>
+        <label for="email">Email:</label>
+        <!-- email field - HTML5 validation lag jaati hai // email input -->
+        <input type="email" id="email" name="email" required>
+    </div>
+    
+    <!-- message field container -->
+    <div>
+        <label for="message">Message:</label>
+        <!-- textarea - 5 rows ki height // message textarea -->
+        <textarea id="message" name="message" rows="5" required></textarea>
+    </div>
+    
+    <!-- submit button // submit button -->
+    <button type="submit">Send Message</button>
+</form>
+
+<!-- form kaise kaam karta hai - info dikhao // form working info -->
+<div>
+    <h3>How it works:</h3>
+    <ul>
+        <li>This form uses POST method to submit data</li>
+        <li>Data is processed by the server and logged to console</li>
+        <li>After submission, you'll see a success message</li>
+    </ul>
+</div>

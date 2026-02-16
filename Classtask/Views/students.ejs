@@ -1,0 +1,51 @@
+<!-- header include kiya // header template -->
+<%- include('partials/header') %>
+
+<!-- student results ka heading -->
+<h1>Student Results</h1>
+
+<!-- table for students data -->
+<table>
+    <!-- table headings -->
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Marks</th>
+            <th>Grade</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <!-- table data rows -->
+    <tbody>
+        <!-- har student ke liye row banayenge // foreach student -->
+        <% students.forEach(student => { %>
+            <tr>
+                <!-- student id -->
+                <td><%= student.id %></td>
+                <!-- student name -->
+                <td><%= student.name %></td>
+                <!-- student marks -->
+                <td><%= student.marks %></td>
+                <!-- student grade -->
+                <td><%= student.grade %></td>
+                <!-- pass ya fail status // status check -->
+                <td>
+                    <!-- agar marks 35 ya zyada hai to pass // pass condition -->
+                    <% if (student.marks >= 35) { %>
+                        <span class="pass">PASS</span>
+                    <% } else { %>
+                        <!-- nahi to fail // fail condition -->
+                        <span class="fail">FAIL</span>
+                    <% } %>
+                </td>
+                <!-- view details link // student details -->
+                <td><a href="/portal/students/<%= student.id %>">View Details</a></td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+
+<!-- footer include kiya // footer template -->
+<%- include('partials/footer') %>

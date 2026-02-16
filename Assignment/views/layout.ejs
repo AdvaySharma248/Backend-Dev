@@ -1,0 +1,41 @@
+<!-- HTML document ka start -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- encoding aur viewport set kiya -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- title dynamic hai -->
+    <title><%= title %></title>
+</head>
+<body>
+    <!-- header section -->
+    <header>
+        <!-- navigation bar -->
+        <nav>
+            <!-- main heading -->
+            <h1>Express Practice Exercises</h1>
+            <!-- navigation links -->
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/users">Users</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/gallery">Gallery</a></li>
+                <li><a href="/blog">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- main content area -->
+    <main>
+        <!-- dynamic content render hoga -->
+        <%- body %>
+    </main>
+    
+    <!-- footer section -->
+    <footer>
+        <!-- copyright notice -->
+        <p>&copy;Express Practice Exercises</p>
+    </footer>
+</body>
+</html>
