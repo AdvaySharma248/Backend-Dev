@@ -23,80 +23,69 @@ let authors = [
   { id: 3, name: "Yuval Noah Harari", country: "Israel" }
 ];
 
-function validateYearValue(yearValue) {
-  if (yearValue === undefined || yearValue === null || yearValue === "") {
-    return { valid: false, message: "year is required" };
-  }
-
-  const numericYear = Number(yearValue);
-  if (!Number.isInteger(numericYear)) {
-    return { valid: false, message: "year must be a valid integer number" };
-  }
-
-  if (numericYear < MIN_YEAR || numericYear > MAX_YEAR) {
-    return {
-      valid: false,
-      message: `year must be between ${MIN_YEAR} and ${MAX_YEAR}`
-    };
-  }
-
-  return { valid: true, year: numericYear };
-}
-
-function validateBookYear(req, res, next) {
-  // Exercise 2: Implement input validation middleware that checks if the year is a valid number and within a reasonable range.
-  if (req.method === "PUT" && req.body.year === undefined) {
-    return next();
-  }
-
-  const result = validateYearValue(req.body.year);
-  if (!result.valid) {
-    return res.status(400).json({ message: result.message });
-  }
-
-  req.body.year = result.year;
-  return next();
-}
-
 function validateBookPayload(req, res, next) {
-  const { title, author } = req.body;
-  if (!title || typeof title !== "string") {
+  if (typeof req.body.title !== "string" || req.body.title.trim() === "") {
     return res
       .status(400)
       .json({ message: "title is required and must be a string" });
   }
 
-  if (!author || typeof author !== "string") {
+  if (typeof req.body.author !== "string" || req.body.author.trim() === "") {
     return res
       .status(400)
       .json({ message: "author is required and must be a string" });
   }
 
-  return next();
+  next();
+}
+
+function validateBookYear(req, res, next) {
+  if (req.method === "PUT" && req.body.year === undefined) {
+    return next();
+  }
+
+  if (req.body.year === undefined || req.body.year === null || req.body.year === "") {
+    return res.status(400).json({ message: "year is required" });
+  }
+
+  const yearNumber = Number(req.body.year);
+
+  if (!Number.isInteger(yearNumber)) {
+    return res
+      .status(400)
+      .json({ message: "year must be a valid integer number" });
+  }
+
+  if (yearNumber < MIN_YEAR || yearNumber > MAX_YEAR) {
+    return res.status(400).json({
+      message: `year must be between ${MIN_YEAR} and ${MAX_YEAR}`
+    });
+  }
+
+  req.body.year = yearNumber;
+  next();
 }
 
 function validatePagination(req, res, next) {
-  const { page, limit } = req.query;
-
-  if (page !== undefined) {
-    const parsedPage = Number(page);
-    if (!Number.isInteger(parsedPage) || parsedPage < 1) {
+  if (req.query.page !== undefined) {
+    const page = Number(req.query.page);
+    if (!Number.isInteger(page) || page < 1) {
       return res
         .status(400)
         .json({ message: "page must be a positive integer" });
     }
   }
 
-  if (limit !== undefined) {
-    const parsedLimit = Number(limit);
-    if (!Number.isInteger(parsedLimit) || parsedLimit < 1) {
+  if (req.query.limit !== undefined) {
+    const limit = Number(req.query.limit);
+    if (!Number.isInteger(limit) || limit < 1) {
       return res
         .status(400)
         .json({ message: "limit must be a positive integer" });
     }
   }
 
-  return next();
+  next();
 }
 
 function validateYearFilter(req, res, next) {
@@ -104,22 +93,31 @@ function validateYearFilter(req, res, next) {
     return next();
   }
 
-  const result = validateYearValue(req.query.year);
-  if (!result.valid) {
-    return res.status(400).json({ message: result.message });
+  const yearNumber = Number(req.query.year);
+
+  if (!Number.isInteger(yearNumber)) {
+    return res
+      .status(400)
+      .json({ message: "year must be a valid integer number" });
   }
 
-  req.query.year = String(result.year);
-  return next();
+  if (yearNumber < MIN_YEAR || yearNumber > MAX_YEAR) {
+    return res.status(400).json({
+      message: `year must be between ${MIN_YEAR} and ${MAX_YEAR}`
+    });
+  }
+
+  req.query.year = String(yearNumber);
+  next();
 }
 
-app.get("/", (_req, res) => {
+app.get("/", function (_req, res) {
   res.json({ message: "Books & Authors API is running" });
 });
 
-app.get("/books/search", (req, res) => {
+app.get("/books/search", function (req, res) {
   // Exercise 5: Add a search endpoint that allows searching books by title using a query parameter.
-  const { title } = req.query;
+  const title = req.query.title;
 
   if (!title || typeof title !== "string") {
     return res
@@ -127,9 +125,13 @@ app.get("/books/search", (req, res) => {
       .json({ message: "title query parameter is required for search" });
   }
 
-  const matchedBooks = books.filter((book) =>
-    book.title.toLowerCase().includes(title.toLowerCase())
-  );
+  const matchedBooks = [];
+  for (let i = 0; i < books.length; i += 1) {
+    const currentBook = books[i];
+    if (currentBook.title.toLowerCase().includes(title.toLowerCase())) {
+      matchedBooks.push(currentBook);
+    }
+  }
 
   return res.json({
     query: title,
@@ -138,31 +140,55 @@ app.get("/books/search", (req, res) => {
   });
 });
 
-app.get("/books", validateYearFilter, validatePagination, (req, res) => {
+app.get("/books", validateYearFilter, validatePagination, function (req, res) {
   // Exercise 1: Add query parameter filtering to the GET all books endpoint to filter by author or year.
   // Exercise 3: Add pagination to the GET all books endpoint using query parameters like ?page=1&limit=10.
-  const { author, year } = req.query;
+  const author = req.query.author;
+  const year = req.query.year;
 
-  let filteredBooks = [...books];
+  const filteredBooks = [];
 
-  if (author) {
-    filteredBooks = filteredBooks.filter((book) =>
-      book.author.toLowerCase().includes(String(author).toLowerCase())
-    );
+  for (let i = 0; i < books.length; i += 1) {
+    const currentBook = books[i];
+    let canAdd = true;
+
+    if (author) {
+      const searchAuthor = String(author).toLowerCase();
+      if (!currentBook.author.toLowerCase().includes(searchAuthor)) {
+        canAdd = false;
+      }
+    }
+
+    if (year && currentBook.year !== Number(year)) {
+      canAdd = false;
+    }
+
+    if (canAdd) {
+      filteredBooks.push(currentBook);
+    }
   }
 
-  if (year) {
-    filteredBooks = filteredBooks.filter((book) => book.year === Number(year));
+  let page = 1;
+  let limit = 10;
+
+  if (req.query.page !== undefined) {
+    page = Number(req.query.page);
   }
 
-  const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
+  if (req.query.limit !== undefined) {
+    limit = Number(req.query.limit);
+  }
+
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + limit;
 
   const paginatedBooks = filteredBooks.slice(startIndex, endIndex);
   const totalItems = filteredBooks.length;
-  const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / limit);
+  let totalPages = 0;
+
+  if (totalItems > 0) {
+    totalPages = Math.ceil(totalItems / limit);
+  }
 
   return res.json({
     filters: { author: author || null, year: year ? Number(year) : null },
@@ -176,9 +202,16 @@ app.get("/books", validateYearFilter, validatePagination, (req, res) => {
   });
 });
 
-app.get("/books/:id", (req, res) => {
+app.get("/books/:id", function (req, res) {
   const bookId = Number(req.params.id);
-  const book = books.find((item) => item.id === bookId);
+  let book = null;
+
+  for (let i = 0; i < books.length; i += 1) {
+    if (books[i].id === bookId) {
+      book = books[i];
+      break;
+    }
+  }
 
   if (!book) {
     return res.status(404).json({ message: "Book not found" });
@@ -187,46 +220,61 @@ app.get("/books/:id", (req, res) => {
   return res.json(book);
 });
 
-app.post("/books", validateBookPayload, validateBookYear, (req, res) => {
+app.post("/books", validateBookPayload, validateBookYear, function (req, res) {
   const newBook = {
-    id: nextBookId++,
+    id: nextBookId,
     title: req.body.title.trim(),
     author: req.body.author.trim(),
     year: req.body.year
   };
 
+  nextBookId += 1;
   books.push(newBook);
   return res.status(201).json(newBook);
 });
 
-app.put("/books/:id", validateBookPayload, validateBookYear, (req, res) => {
+app.put("/books/:id", validateBookPayload, validateBookYear, function (req, res) {
   const bookId = Number(req.params.id);
-  const index = books.findIndex((item) => item.id === bookId);
+  let index = -1;
 
-  if (index === -1) {
+  for (let i = 0; i < books.length; i += 1) {
+    if (books[i].id === bookId) {
+      index = i;
+      break;
+    }
+  }
+
+  if (index < 0) {
     return res.status(404).json({ message: "Book not found" });
   }
 
-  books[index] = {
-    ...books[index],
-    title: req.body.title.trim(),
-    author: req.body.author.trim(),
-    year: req.body.year ?? books[index].year
-  };
+  books[index].title = req.body.title.trim();
+  books[index].author = req.body.author.trim();
+
+  if (req.body.year !== undefined) {
+    books[index].year = req.body.year;
+  }
 
   return res.json(books[index]);
 });
 
-app.delete("/books/:id", (req, res) => {
+app.delete("/books/:id", function (req, res) {
   const bookId = Number(req.params.id);
-  const index = books.findIndex((item) => item.id === bookId);
+  let index = -1;
 
-  if (index === -1) {
+  for (let i = 0; i < books.length; i += 1) {
+    if (books[i].id === bookId) {
+      index = i;
+      break;
+    }
+  }
+
+  if (index < 0) {
     return res.status(404).json({ message: "Book not found" });
   }
 
   const deletedBook = books[index];
-  books = books.filter((item) => item.id !== bookId);
+  books.splice(index, 1);
 
   return res.json({
     message: "Book deleted successfully",
@@ -235,13 +283,20 @@ app.delete("/books/:id", (req, res) => {
 });
 
 // Exercise 4: Create a new resource (authors) and implement full CRUD operations for it.
-app.get("/authors", (_req, res) => {
+app.get("/authors", function (_req, res) {
   res.json(authors);
 });
 
-app.get("/authors/:id", (req, res) => {
+app.get("/authors/:id", function (req, res) {
   const authorId = Number(req.params.id);
-  const author = authors.find((item) => item.id === authorId);
+  let author = null;
+
+  for (let i = 0; i < authors.length; i += 1) {
+    if (authors[i].id === authorId) {
+      author = authors[i];
+      break;
+    }
+  }
 
   if (!author) {
     return res.status(404).json({ message: "Author not found" });
@@ -250,10 +305,10 @@ app.get("/authors/:id", (req, res) => {
   return res.json(author);
 });
 
-app.post("/authors", (req, res) => {
+app.post("/authors", function (req, res) {
   const { name, country } = req.body;
 
-  if (!name || typeof name !== "string") {
+  if (typeof name !== "string" || name.trim() === "") {
     return res
       .status(400)
       .json({ message: "name is required and must be a string" });
@@ -264,26 +319,34 @@ app.post("/authors", (req, res) => {
   }
 
   const newAuthor = {
-    id: nextAuthorId++,
+    id: nextAuthorId,
     name: name.trim(),
     country: country ? country.trim() : ""
   };
 
+  nextAuthorId += 1;
   authors.push(newAuthor);
   return res.status(201).json(newAuthor);
 });
 
-app.put("/authors/:id", (req, res) => {
+app.put("/authors/:id", function (req, res) {
   const authorId = Number(req.params.id);
-  const index = authors.findIndex((item) => item.id === authorId);
+  let index = -1;
 
-  if (index === -1) {
+  for (let i = 0; i < authors.length; i += 1) {
+    if (authors[i].id === authorId) {
+      index = i;
+      break;
+    }
+  }
+
+  if (index < 0) {
     return res.status(404).json({ message: "Author not found" });
   }
 
   const { name, country } = req.body;
 
-  if (!name || typeof name !== "string") {
+  if (typeof name !== "string" || name.trim() === "") {
     return res
       .status(400)
       .json({ message: "name is required and must be a string" });
@@ -293,25 +356,29 @@ app.put("/authors/:id", (req, res) => {
     return res.status(400).json({ message: "country must be a string" });
   }
 
-  authors[index] = {
-    ...authors[index],
-    name: name.trim(),
-    country: country ? country.trim() : ""
-  };
+  authors[index].name = name.trim();
+  authors[index].country = country ? country.trim() : "";
 
   return res.json(authors[index]);
 });
 
-app.delete("/authors/:id", (req, res) => {
+app.delete("/authors/:id", function (req, res) {
   const authorId = Number(req.params.id);
-  const index = authors.findIndex((item) => item.id === authorId);
+  let index = -1;
 
-  if (index === -1) {
+  for (let i = 0; i < authors.length; i += 1) {
+    if (authors[i].id === authorId) {
+      index = i;
+      break;
+    }
+  }
+
+  if (index < 0) {
     return res.status(404).json({ message: "Author not found" });
   }
 
   const deletedAuthor = authors[index];
-  authors = authors.filter((item) => item.id !== authorId);
+  authors.splice(index, 1);
 
   return res.json({
     message: "Author deleted successfully",
